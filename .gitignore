@@ -1,0 +1,52 @@
+# HealFast Branding - Git Ignore
+
+# SSL Certificates (sensitive - should not be committed)
+ssl/*.crt
+ssl/*.key
+ssl/*.pem
+ssl/*.csr
+ssl/*.p12
+ssl/*.pfx
+
+# Environment files with passwords
+.env
+.env.local
+.env.production
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Docker volumes (if any)
+volumes/
+
+# Node modules (if any)
+node_modules/
+
+# Python (if any)
+__pycache__/
+*.pyc
+*.pyo

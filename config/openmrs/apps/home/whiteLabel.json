@@ -1,0 +1,10 @@
+{
+  "logo": "/bahmni_config/openmrs/apps/home/logo.png",
+  "logoWhite": "/bahmni_config/openmrs/apps/home/logo.png",
+  "showBahmniBranding": false,
+  "showHelpLink": true,
+  "helpLink": "https://healfastusa.org/support",
+  "customCSS": "/bahmni_config/custom/healfast-custom.css",
+  "title": "HealFast USA",
+  "subTitle": "Medical Information System"
+}

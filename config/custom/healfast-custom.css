@@ -1,0 +1,254 @@
+/* HealFast USA Custom Branding CSS */
+
+/* Import Poppins Font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Primary Green Color from HealFast Logo - Vibrant Green */
+:root {
+  --healfast-green: #00C853;
+  --healfast-green-dark: #00A043;
+  --healfast-green-light: #4DD865;
+  --healfast-green-hover: #00B84A;
+}
+
+/* Apply Poppins font to entire application */
+* {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* Login Page Styling */
+.login-container,
+.login-page,
+.login-wrapper {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.login-container .logo,
+.login-page .logo {
+  max-width: 200px;
+  height: auto;
+}
+
+/* Primary Button Styling - Green Theme */
+.btn-primary,
+.button-primary,
+.primary-button,
+button[type="submit"].primary,
+input[type="submit"].primary {
+  background-color: var(--healfast-green) !important;
+  border-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+.btn-primary:hover,
+.button-primary:hover,
+.primary-button:hover,
+button[type="submit"].primary:hover,
+input[type="submit"].primary:hover {
+  background-color: var(--healfast-green-hover) !important;
+  border-color: var(--healfast-green-hover) !important;
+}
+
+.btn-primary:active,
+.button-primary:active,
+.primary-button:active {
+  background-color: var(--healfast-green-dark) !important;
+  border-color: var(--healfast-green-dark) !important;
+}
+
+/* Links - Green Theme */
+a,
+.link,
+.nav-link {
+  color: var(--healfast-green) !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+a:hover,
+.link:hover,
+.nav-link:hover {
+  color: var(--healfast-green-hover) !important;
+}
+
+/* Header/Navigation Styling */
+.navbar,
+.header,
+.top-nav,
+.main-header {
+  background-color: #ffffff !important;
+  border-bottom: 2px solid var(--healfast-green) !important;
+}
+
+.navbar-brand,
+.header-logo {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  color: var(--healfast-green) !important;
+}
+
+/* Active Navigation Items */
+.nav-item.active,
+.nav-link.active,
+.menu-item.active {
+  background-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+}
+
+.nav-item.active a,
+.nav-link.active a {
+  color: #ffffff !important;
+}
+
+/* Form Input Focus States */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--healfast-green) !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 200, 83, 0.25) !important;
+  outline: none !important;
+}
+
+/* Checkbox and Radio Buttons */
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background-color: var(--healfast-green) !important;
+  border-color: var(--healfast-green) !important;
+}
+
+/* Table Header Styling */
+table thead th,
+.table-header {
+  background-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+/* Badge and Label Styling */
+.badge-primary,
+.label-primary,
+.tag-primary {
+  background-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* Alert/Success Messages */
+.alert-success,
+.success-message {
+  background-color: var(--healfast-green-light) !important;
+  border-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+}
+
+/* Progress Bars */
+.progress-bar,
+.progress-bar-primary {
+  background-color: var(--healfast-green) !important;
+}
+
+/* Sidebar/Menu Styling */
+.sidebar,
+.side-menu,
+.left-menu {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.sidebar .menu-item:hover,
+.side-menu .menu-item:hover {
+  background-color: var(--healfast-green-light) !important;
+  color: #ffffff !important;
+}
+
+/* Card Headers */
+.card-header,
+.panel-header {
+  background-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+/* Tabs */
+.nav-tabs .nav-link.active {
+  border-color: var(--healfast-green) var(--healfast-green) transparent !important;
+  color: var(--healfast-green) !important;
+  font-weight: 500 !important;
+}
+
+/* Dropdown Menu */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+  background-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+}
+
+/* Search/Filter Buttons */
+.btn-search,
+.filter-button,
+.search-button {
+  background-color: var(--healfast-green) !important;
+  border-color: var(--healfast-green) !important;
+  color: #ffffff !important;
+}
+
+/* Icon Colors */
+.icon-primary,
+.fa-primary {
+  color: var(--healfast-green) !important;
+}
+
+/* Loading Spinner */
+.spinner-primary,
+.loading-spinner {
+  border-color: var(--healfast-green) !important;
+}
+
+/* Footer Styling */
+.footer,
+.page-footer {
+  background-color: #f8f9fa !important;
+  border-top: 2px solid var(--healfast-green) !important;
+  font-family: 'Poppins', sans-serif !important;
+  color: var(--healfast-green) !important;
+}
+
+/* Print Styles */
+@media print {
+  * {
+    font-family: 'Poppins', sans-serif !important;
+  }
+  
+  .print-header {
+    border-bottom: 2px solid var(--healfast-green) !important;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .navbar-brand,
+  .header-logo {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* Override any Bahmni default colors */
+.bahmni-primary-color {
+  color: var(--healfast-green) !important;
+}
+
+.bahmni-primary-bg {
+  background-color: var(--healfast-green) !important;
+}
+
+/* Ensure all text uses Poppins */
+h1, h2, h3, h4, h5, h6,
+p, span, div, label, input, textarea, select, button {
+  font-family: 'Poppins', sans-serif !important;
+}
