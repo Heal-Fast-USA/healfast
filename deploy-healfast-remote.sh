@@ -65,7 +65,8 @@ sudo sed -i "s|CHANGE_ME_OPENMRS_DB_PASSWORD|$PASS|g" "$ROOT/bahmni-lite/.env"
 sudo sed -i "s|CHANGE_ME_ATOMFEED_PASSWORD|$PASS|g" "$ROOT/bahmni-lite/.env"
 sudo sed -i "s|CHANGE_ME_REPORTS_DB_PASSWORD|$PASS|g" "$ROOT/bahmni-lite/.env"
 sudo sed -i "s|CHANGE_ME_ROOT_PASSWORD|$PASS|g" "$ROOT/bahmni-lite/.env"
-echo "LOKI_URL=" | sudo tee -a "$ROOT/bahmni-lite/.env" >/dev/null 2>&1 || true
+# Required by compose YAML (Loki not used; prevents "LOKI_URL is missing" error)
+grep -q '^LOKI_URL=' "$ROOT/bahmni-lite/.env" || echo "LOKI_URL=http://127.0.0.1:3100" | sudo tee -a "$ROOT/bahmni-lite/.env" >/dev/null
 
 # Fix ownership so administrator can run docker compose
 sudo chown -R "$USER:$USER" "$ROOT" 2>/dev/null || true
