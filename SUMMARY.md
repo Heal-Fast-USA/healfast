@@ -14,7 +14,7 @@ This package provides a complete end-to-end customization solution for deploying
 - **White Labeling**: Complete removal of default Bahmni branding
 
 ### ✅ Infrastructure Configuration
-- **Nginx Configuration**: Single server for **91.221.36.80** (no subdomains)
+- **Nginx Configuration**: Subdomains **clinic.healfastusa.org** and **staff.healfastusa.org** (IP 69.30.247.92)
 - **SSL/TLS Support**: Certificate management and HTTPS configuration
 - **Docker Compose Override**: Seamless integration without modifying base files
 - **Environment Templates**: Pre-configured environment variables
@@ -77,7 +77,7 @@ healfast-branding/
    ```
 
 5. **Verify**
-   - Open: `https://91.221.36.80`
+   - Open: `https://clinic.healfastusa.org` and `https://staff.healfastusa.org`
    - Check: Logo, green theme, Poppins font
 
 ## Key Features
@@ -90,7 +90,7 @@ healfast-branding/
 - ✅ White labeling configuration
 
 ### Domain Configuration
-- ✅ **91.221.36.80** - Single server (HTTPS)
+- ✅ **clinic.healfastusa.org** and **staff.healfastusa.org** (HTTPS)
 - ✅ SSL/TLS encryption for both subdomains
 - ✅ HTTP to HTTPS redirects
 
@@ -105,7 +105,7 @@ healfast-branding/
 - **OS**: Ubuntu Server 22.04 LTS (64-bit)
 - **Docker**: 20.10.13+
 - **Docker Compose**: V2
-- **Server IP**: 91.221.36.80 (no DNS required)
+- **Server IP**: 69.30.247.92; DNS: clinic.healfastusa.org and staff.healfastusa.org → this IP
 - **Resources**: 4 CPU cores, 8 GB RAM, 100 GB disk
 
 ## Documentation
@@ -131,7 +131,7 @@ After deployment, verify:
 - [ ] Favicon displays in browser tab
 - [ ] Green color theme applied (buttons, links, etc.)
 - [ ] Poppins font visible throughout UI
-- [ ] `https://91.221.36.80` loads correctly
+- [ ] `https://clinic.healfastusa.org` loads correctly
 - [ ] SSL certificates valid (no browser warnings)
 - [ ] Custom CSS loads (check browser dev tools)
 - [ ] No default Bahmni branding visible
@@ -204,14 +204,14 @@ docker compose logs proxy
 
 ### Site not loading
 ```bash
-curl -I https://91.221.36.80
+curl -I https://clinic.healfastusa.org
 docker compose exec proxy nginx -t
 docker compose logs proxy
 ```
 
 ## Next Steps After Deployment
 
-1. Access OpenMRS admin: `https://91.221.36.80/openmrs`
+1. Access OpenMRS admin: `https://clinic.healfastusa.org/openmrs`
 2. Create users and configure roles
 3. Set up clinic locations and departments
 4. Configure clinical forms and templates

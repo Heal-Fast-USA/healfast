@@ -17,7 +17,7 @@ This guide provides step-by-step instructions for deploying a fully branded Heal
 
 - Ubuntu Server 22.04 LTS (64-bit)
 - Root or sudo access
-- Server IP: **91.221.36.80** (single server, no subdomains)
+- Server IP: **69.30.247.92**; subdomains: **clinic.healfastusa.org**, **staff.healfastusa.org**
 - Minimum server requirements:
   - 4 CPU cores
   - 8 GB RAM
@@ -47,7 +47,7 @@ sudo ufw enable
 
 Before proceeding, ensure your DNS records are configured:
 
-1. Server is accessed by IP: **91.221.36.80** (no DNS required).
+1. DNS: **clinic.healfastusa.org** and **staff.healfastusa.org** must point to **69.30.247.92**.
 2. Ensure ports 80, 443, 22 are open to this IP.
 
 ## SSL Certificate Setup
@@ -228,7 +228,7 @@ docker compose logs proxy -f
 ### 1. Verify Logo and Branding
 
 1. Open browser and navigate to:
-   - `https://91.221.36.80`
+   - `https://clinic.healfastusa.org`
 
 2. Check for:
    - ✓ HealFast logo on login page
@@ -240,7 +240,7 @@ docker compose logs proxy -f
 
 ```bash
 # Test SSL from command line
-openssl s_client -connect 91.221.36.80:443
+openssl s_client -connect 69.30.247.92:443
 
 # Or use online tools:
 # https://www.ssllabs.com/ssltest/
@@ -255,7 +255,7 @@ openssl s_client -connect 91.221.36.80:443
 
 ### 4. Test Subdomain Routing
 
-- `https://91.221.36.80` → Should show HealFast Bahmni
+- `https://clinic.healfastusa.org` and `https://staff.healfastusa.org` → Should show HealFast Bahmni
 
 ## Troubleshooting
 
@@ -318,7 +318,7 @@ docker compose exec openmrs env | grep OPENMRS
 
 ```bash
 # Test DNS resolution
-ping 91.221.36.80
+ping clinic.healfastusa.org
 
 # Check if DNS has propagated (may take up to 48 hours)
 ```
@@ -355,7 +355,7 @@ sudo certbot renew --dry-run
 # Or renew manually
 sudo certbot renew
 # Then copy new certificates
-# If using Let's Encrypt for 91.221.36.80 (requires a domain pointing to this IP):
+# If using Let's Encrypt (requires clinic.healfastusa.org and staff.healfastusa.org pointing to 69.30.247.92):
 # sudo cp /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem healfast-branding/ssl/healfastusa.org.crt
 # sudo cp /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem healfast-branding/ssl/healfastusa.org.key
 docker compose restart proxy

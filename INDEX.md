@@ -51,7 +51,7 @@ healfast-branding/
 │   │       └── healfast-custom.css ← Custom CSS
 │   │
 │   ├── nginx/
-│   │   └── nginx.conf        ← Single server (91.221.36.80)
+│   │   └── nginx.conf        ← clinic + staff.healfastusa.org (69.30.247.92)
 │   │
 │   ├── docker-compose.override.yml ← Docker config
 │   └── env.template          ← Environment variables

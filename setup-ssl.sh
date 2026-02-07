@@ -1,6 +1,6 @@
 #!/bin/bash
 # HealFast USA - SSL Certificate Setup Script
-# Server IP: 91.221.36.80 (no subdomains)
+# Subdomains: clinic.healfastusa.org, staff.healfastusa.org (IP 69.30.247.92)
 
 set -e
 
@@ -57,7 +57,7 @@ case $option in
             fi
             
             echo ""
-            echo "Obtaining certificates (requires a domain pointing to 91.221.36.80)..."
+            echo "Obtaining certificates (requires clinic.healfastusa.org and staff.healfastusa.org pointing to 69.30.247.92)..."
             echo "Note: You may need to temporarily stop nginx/proxy service"
             echo ""
             read -p "Enter your domain name (e.g. example.com): " DOMAIN
@@ -69,7 +69,7 @@ case $option in
                 --agree-tos \
                 --non-interactive || {
                 echo ""
-                echo "Certbot failed. Ensure DNS for $DOMAIN points to 91.221.36.80 and ports 80/443 are open."
+                echo "Certbot failed. Ensure DNS for $DOMAIN points to 69.30.247.92 and ports 80/443 are open."
                 exit 1
             }
             
@@ -119,12 +119,12 @@ case $option in
         openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
             -keyout "$SSL_DIR/healfastusa.org.key" \
             -out "$SSL_DIR/healfastusa.org.crt" \
-            -subj "/CN=91.221.36.80" \
-            -addext "subjectAltName=IP:91.221.36.80,DNS:91.221.36.80" 2>/dev/null || \
+            -subj "/CN=clinic.healfastusa.org" \
+            -addext "subjectAltName=DNS:clinic.healfastusa.org,DNS:staff.healfastusa.org,IP:69.30.247.92" 2>/dev/null || \
         openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
             -keyout "$SSL_DIR/healfastusa.org.key" \
             -out "$SSL_DIR/healfastusa.org.crt" \
-            -subj "/CN=91.221.36.80"
+            -subj "/CN=clinic.healfastusa.org"
         
         chmod 644 "$SSL_DIR/healfastusa.org.crt"
         chmod 600 "$SSL_DIR/healfastusa.org.key"

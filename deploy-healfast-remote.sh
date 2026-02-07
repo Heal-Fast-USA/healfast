@@ -44,16 +44,16 @@ fi
 # Ensure SSL certs exist (self-signed if not)
 sudo mkdir -p "$HEALFAST/ssl"
 if [ ! -f "$HEALFAST/ssl/healfastusa.org.crt" ]; then
-  echo "Creating self-signed SSL certificate..."
+  echo "Creating self-signed SSL certificate (clinic + staff.healfastusa.org, IP 69.30.247.92)..."
   sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout "$HEALFAST/ssl/healfastusa.org.key" \
     -out "$HEALFAST/ssl/healfastusa.org.crt" \
-    -subj "/CN=91.221.36.80" \
-    -addext "subjectAltName=IP:91.221.36.80,DNS:91.221.36.80" 2>/dev/null || \
+    -subj "/CN=clinic.healfastusa.org" \
+    -addext "subjectAltName=DNS:clinic.healfastusa.org,DNS:staff.healfastusa.org,IP:69.30.247.92" 2>/dev/null || \
   sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout "$HEALFAST/ssl/healfastusa.org.key" \
     -out "$HEALFAST/ssl/healfastusa.org.crt" \
-    -subj "/CN=91.221.36.80"
+    -subj "/CN=clinic.healfastusa.org"
 fi
 
 # Create .env from template with absolute paths and passwords
@@ -80,6 +80,6 @@ sudo docker compose -f docker-compose.yml -f ../healfast-branding/docker-compose
 
 echo ""
 echo "=== HealFast Bahmni is starting ==="
-echo "Wait 5-10 minutes for all services, then open: https://91.221.36.80"
+echo "Wait 5-10 minutes for all services, then open: https://clinic.healfastusa.org and https://staff.healfastusa.org"
 echo "Change default passwords in: $ROOT/bahmni-lite/.env"
 echo "Status: sudo docker compose -f $ROOT/bahmni-lite/docker-compose.yml -f $HEALFAST/docker-compose.override.yml --env-file $ROOT/bahmni-lite/.env -d ps"

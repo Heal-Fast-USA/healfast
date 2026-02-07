@@ -55,7 +55,7 @@ This document summarizes all changes made to customize Bahmni for HealFast USA.
 - **Features**:
   - HTTP to HTTPS redirects
   - SSL/TLS termination
-  - Single server: **91.221.36.80** (no subdomains)
+  - Subdomains: **clinic.healfastusa.org**, **staff.healfastusa.org** (IP 69.30.247.92)
   - Security headers
   - WebSocket support
   - Proper proxy headers
@@ -128,7 +128,7 @@ healfast-branding/
 ## Domain Configuration
 
 ### Subdomain Routing
-- **91.221.36.80** (single server):
+- **clinic.healfastusa.org** / **staff.healfastusa.org** (69.30.247.92):
   - Main Bahmni web interface
   - OpenMRS API
   - Reports
@@ -138,7 +138,7 @@ healfast-branding/
 ### SSL/TLS
 - Certificate location: `ssl/healfastusa.org.crt`
 - Private key: `ssl/healfastusa.org.key`
-- Certificate for IP 91.221.36.80 (self-signed or your cert)
+- Certificate for clinic/staff.healfastusa.org and 69.30.247.92 (self-signed or your cert)
 - Security headers configured
 - TLS 1.2+ only
 

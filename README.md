@@ -126,9 +126,9 @@ docker compose --env-file .env up -d
 
 ### Subdomains
 
-**91.221.36.80** - Single server (no subdomains)
+**clinic.healfastusa.org** and **staff.healfastusa.org** (IP 69.30.247.92)
 - Routes to: bahmni-web, openmrs, reports, implementer-interface
-- Access: https://91.221.36.80
+- Access: https://clinic.healfastusa.org and https://staff.healfastusa.org
 
 ### SSL/TLS
 
@@ -217,7 +217,7 @@ After deployment, verify:
 - [ ] Favicon shows in browser tab
 - [ ] Green color theme applied (buttons, links, etc.)
 - [ ] Poppins font applied throughout UI
-- [ ] `https://91.221.36.80` loads correctly
+- [ ] `https://clinic.healfastusa.org` loads correctly
 - [ ] SSL certificates valid (no browser warnings)
 - [ ] Custom CSS loads (check browser dev tools)
 - [ ] No default Bahmni branding visible
@@ -259,7 +259,7 @@ ls -lh ssl/
 openssl x509 -in ssl/healfastusa.org.crt -text -noout
 
 # Test SSL connection
-openssl s_client -connect 91.221.36.80:443
+openssl s_client -connect clinic.healfastusa.org:443
 ```
 
 ### Subdomain Not Routing
@@ -272,7 +272,7 @@ docker compose exec proxy nginx -t
 docker compose logs proxy
 
 # Verify DNS resolution
-curl -I https://91.221.36.80
+curl -I https://clinic.healfastusa.org
 ```
 
 ## Maintenance

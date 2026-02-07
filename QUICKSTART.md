@@ -6,7 +6,7 @@ This is a condensed quick start guide. For detailed instructions, see [DEPLOYMEN
 
 - [ ] Ubuntu Server 22.04 LTS
 - [ ] Root/sudo access
-- [ ] Server IP: **91.221.36.80** (no subdomains)
+- [ ] DNS: clinic.healfastusa.org and staff.healfastusa.org → 69.30.247.92
 - [ ] Ports 80, 443, 22 open
 
 ## 5-Minute Setup
@@ -68,12 +68,12 @@ docker compose logs -f
 docker compose ps
 
 # Test URL
-curl -I https://91.221.36.80
+curl -I https://clinic.healfastusa.org
 ```
 
 ## Verification
 
-1. Open browser: `https://91.221.36.80`
+1. Open browser: `https://clinic.healfastusa.org` or `https://staff.healfastusa.org`
 2. Check for:
    - ✓ HealFast logo
    - ✓ Green theme
@@ -102,7 +102,7 @@ docker compose restart proxy
 
 ## Next Steps
 
-1. Access OpenMRS admin: `https://91.221.36.80/openmrs`
+1. Access OpenMRS admin: `https://clinic.healfastusa.org/openmrs`
 2. Create users and configure system
 3. Set up clinic locations
 4. Configure clinical forms

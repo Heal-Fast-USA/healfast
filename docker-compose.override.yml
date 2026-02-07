@@ -2,8 +2,7 @@
 # This file extends the base docker-compose.yml to add branding and SSL support
 # Requires HEALFAST_BRANDING_PATH in .env (absolute path to healfast-branding folder).
 # Usage: docker compose -f docker-compose.yml -f ../healfast-branding/docker-compose.override.yml --env-file .env up -d
-
-version: '3.7'
+# (version is omitted; Compose v2+ ignores it)
 
 services:
   # Override proxy service to use custom nginx with SSL and subdomain routing
@@ -27,14 +26,16 @@ services:
     environment:
       TZ: ${TZ:-America/New_York}
 
-  # Override bahmni-config to include HealFast branding
+  # Override bahmni-config: our config at /usr/local; separate writable volume at /etc so image's cp has two distinct paths
   bahmni-config:
     volumes:
       - '${CONFIG_VOLUME:-./healfast-branding/config}:/usr/local/bahmni_config'
-      # Also mount to the standard location for compatibility
-      - '${CONFIG_VOLUME:-./healfast-branding/config}:/etc/bahmni_config'
+      - bahmni-config-etc:/etc/bahmni_config
 
   # Ensure bahmni-web has access to branding config
   bahmni-web:
     volumes:
       - "${CONFIG_VOLUME:-./healfast-branding/config}:/usr/local/apache2/htdocs/bahmni_config/:ro"
+
+volumes:
+  bahmni-config-etc:
