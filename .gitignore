@@ -43,7 +43,7 @@ temp/
 # Docker volumes (if any)
 volumes/
 
-# Second copy of config for bahmni-config (sync with sync-config-etc.sh)
+# Synced copy of config (created by fix-and-start.sh)
 config_etc/
 
 # Node modules (if any)
