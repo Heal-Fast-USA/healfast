@@ -59,6 +59,7 @@ fi
 # Create .env from template with absolute paths and passwords
 echo "Configuring environment..."
 sudo cp "$HEALFAST/env.template" "$ROOT/bahmni-lite/.env"
+sudo sed -i "s|HEALFAST_BRANDING_PATH=.*|HEALFAST_BRANDING_PATH=$HEALFAST|" "$ROOT/bahmni-lite/.env"
 sudo sed -i "s|CONFIG_VOLUME=.*|CONFIG_VOLUME=$HEALFAST/config|" "$ROOT/bahmni-lite/.env"
 sudo sed -i "s|CERTIFICATE_PATH=.*|CERTIFICATE_PATH=$HEALFAST/ssl|" "$ROOT/bahmni-lite/.env"
 sudo sed -i "s|CHANGE_ME_OPENMRS_DB_PASSWORD|$PASS|g" "$ROOT/bahmni-lite/.env"
