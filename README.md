@@ -19,12 +19,18 @@ healfast-branding/
 ├── nginx/
 │   └── nginx.conf                   # Nginx configuration for subdomain routing
 ├── docker-compose.override.yml      # Docker Compose override for branding
+├── update-server.sh                 # Apply repo to server (fix bahmni-config, .env, recreate containers)
 ├── env.template                     # Environment variables template
 ├── setup-ssl.sh                     # SSL certificate setup script
 ├── init-branding.sh                 # Branding initialization script
+├── UPDATE.md                        # How to update the server from this repo
 ├── DEPLOYMENT.md                    # Full deployment guide
 └── README.md                        # This file
 ```
+
+## Updating an existing server
+
+If the server is already running and you want to apply the latest config (e.g. fix bahmni-config “same file”, proxy): **[UPDATE.md](UPDATE.md)** — clone or pull this repo on the server, then run `sudo bash update-server.sh`.
 
 ## Quick Start
 

@@ -26,16 +26,13 @@ services:
     environment:
       TZ: ${TZ:-America/New_York}
 
-  # Override bahmni-config: our config at /usr/local; separate writable volume at /etc so image's cp has two distinct paths
+  # Override bahmni-config: image's start.sh copies between /etc and /usr/local; they are the same inode in the image (symlink). Use TWO separate host dirs (config + config_etc) so the container sees two distinct paths.
   bahmni-config:
     volumes:
-      - '${CONFIG_VOLUME:-./healfast-branding/config}:/usr/local/bahmni_config'
-      - bahmni-config-etc:/etc/bahmni_config
+      - '${CONFIG_VOLUME:-./healfast-branding/config}:/usr/local/bahmni_config:ro'
+      - '${CONFIG_VOLUME_ETC:-./healfast-branding/config_etc}:/etc/bahmni_config'
 
   # Ensure bahmni-web has access to branding config
   bahmni-web:
     volumes:
       - "${CONFIG_VOLUME:-./healfast-branding/config}:/usr/local/apache2/htdocs/bahmni_config/:ro"
-
-volumes:
-  bahmni-config-etc:

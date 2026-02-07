@@ -4,11 +4,14 @@
 
 **Cause:** The override mounted the same config to both `/usr/local/bahmni_config` and `/etc/bahmni_config`, so the image’s copy step failed.
 
-**Fix (in repo):** Override mounts your config to `/usr/local/bahmni_config` and a separate named volume to `/etc/bahmni_config` so the image's copy step has two distinct paths. Update and recreate the container:
+**Fix (in repo):** Use two separate host dirs: `config` and `config_etc` (real copy). Override mounts them to `/usr/local/bahmni_config` and `/etc/bahmni_config`. Run `sync-config-etc.sh` once (and after any config change), set `CONFIG_VOLUME_ETC` in `.env`, then recreate the container.
 
 ```bash
 cd /opt/bahmni-docker/healfast-branding
-sudo git pull origin main
+git pull
+chmod +x sync-config-etc.sh
+./sync-config-etc.sh
+grep -q CONFIG_VOLUME_ETC /opt/bahmni-docker/bahmni-lite/.env || echo "CONFIG_VOLUME_ETC=/opt/bahmni-docker/healfast-branding/config_etc" | sudo tee -a /opt/bahmni-docker/bahmni-lite/.env
 cd /opt/bahmni-docker/bahmni-lite
 sudo docker compose -f docker-compose.yml -f ../healfast-branding/docker-compose.override.yml --env-file .env up -d --force-recreate bahmni-config
 ```
