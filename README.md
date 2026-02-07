@@ -36,3 +36,12 @@ No other steps needed. Then open **https://clinic.healfastusa.org** (or your URL
 ## DNS
 
 Point **clinic.healfastusa.org** and **staff.healfastusa.org** to your server IP (69.30.247.92).
+
+## Mixed content (HTTPS)
+
+If the browser blocks requests to `http://...openmrs/...` (mixed content), set OpenMRS to use HTTPS:
+
+1. Log in to OpenMRS Admin: **https://clinic.healfastusa.org/openmrs** (admin user).
+2. Go to **Advanced Settings → Global Property**.
+3. Find **bahmni.baseUrl** (or similar) and set it to **https://clinic.healfastusa.org** (no trailing slash). Create it if missing.
+4. Save and hard-refresh the app.
