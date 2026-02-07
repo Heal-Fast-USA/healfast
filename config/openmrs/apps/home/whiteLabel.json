@@ -12,8 +12,8 @@
   "homePage": {
     "logo": "/bahmni_config/openmrs/apps/home/logo.png",
     "header_text": "Welcome to HealFast USA",
-    "title_text": "HealFast USA",
-    "subTitle": "Medical Information System"
+    "title_text": "",
+    "subTitle": ""
   },
   "loginPage": {
     "logo": "/bahmni_config/openmrs/apps/home/logo.png",

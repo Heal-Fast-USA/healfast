@@ -252,3 +252,117 @@ h1, h2, h3, h4, h5, h6,
 p, span, div, label, input, textarea, select, button {
   font-family: 'Poppins', sans-serif !important;
 }
+
+/* ========== Header: logo only, no text beside logo ========== */
+.clint-logo-wrapper span,
+.title_text,
+.header_text + .title_text,
+[class*="title_text"],
+.bahmni-home .title_text {
+  display: none !important;
+}
+.clint-logo-wrapper {
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+.clint-logo-wrapper img.client_logo {
+  max-width: 180px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ========== Dashboard / Home cards – HealFast green (override Bahmni orange) ========== */
+.section,
+.dashboard-section,
+.tile,
+[class*="dashboard"] .section,
+.bahmni-home .section {
+  background: #fff !important;
+  border: 2px solid var(--healfast-green) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 200, 83, 0.15) !important;
+  transition: all 0.25s ease !important;
+}
+.section:hover,
+.dashboard-section:hover,
+.tile:hover,
+.bahmni-home .section:hover {
+  border-color: var(--healfast-green-dark) !important;
+  box-shadow: 0 6px 20px rgba(0, 200, 83, 0.25) !important;
+  background: rgba(0, 200, 83, 0.04) !important;
+}
+.launch span,
+.section .launch span,
+.dashboard-section span,
+.tile-title {
+  color: var(--healfast-green) !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  text-transform: none !important;
+}
+.section a:hover span,
+.dashboard-section a:hover span {
+  color: var(--healfast-green-dark) !important;
+}
+/* Bahmni orange override */
+.launch span { color: var(--healfast-green) !important; }
+.section .launch img {
+  filter: none;
+}
+.container > h4 {
+  color: var(--healfast-green-dark) !important;
+  font-weight: 600 !important;
+}
+.header_text {
+  color: var(--healfast-green-dark) !important;
+  font-weight: 600 !important;
+}
+
+/* ========== Footer – full HealFast transform ========== */
+.power-by,
+.page-footer,
+.footer,
+.bottom-banner-wrapper + div,
+[class*="power-by"],
+.bahmni-home .power-by {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 14px 20px !important;
+  background: var(--healfast-green) !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  border: none !important;
+  border-top: 3px solid var(--healfast-green-dark) !important;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08) !important;
+}
+.power-by a,
+.page-footer a,
+.footer a,
+.power-by .helper_url {
+  color: #fff !important;
+  text-decoration: underline !important;
+  opacity: 0.95;
+}
+.power-by a:hover,
+.footer a:hover {
+  color: #fff !important;
+  opacity: 1;
+}
+.power-by img {
+  opacity: 0.9;
+  vertical-align: middle;
+}
+.bottom-banner-wrapper {
+  display: none !important;
+}
+.body-content,
+.container {
+  padding-bottom: 60px !important;
+}
