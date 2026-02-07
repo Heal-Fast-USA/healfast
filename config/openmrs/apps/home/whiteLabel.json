@@ -3,8 +3,17 @@
   "logoWhite": "/bahmni_config/openmrs/apps/home/logo.png",
   "showBahmniBranding": false,
   "showHelpLink": true,
-  "helpLink": "https://healfastusa.org/support",
+  "helpLink": {
+    "url": "https://healfastusa.org/support"
+  },
   "customCSS": "/bahmni_config/custom/healfast-custom.css",
   "title": "HealFast USA",
-  "subTitle": "Medical Information System"
+  "subTitle": "Medical Information System",
+  "homePage": {
+    "logo": "/bahmni_config/openmrs/apps/home/logo.png",
+    "header_text": "Welcome to HealFast USA",
+    "title_text": "HealFast USA",
+    "subTitle": "Medical Information System"
+  },
+  "landingPage": []
 }
