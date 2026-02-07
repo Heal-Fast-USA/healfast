@@ -14,7 +14,7 @@ This package provides a complete end-to-end customization solution for deploying
 - **White Labeling**: Complete removal of default Bahmni branding
 
 ### ✅ Infrastructure Configuration
-- **Nginx Configuration**: Subdomain routing for `clinic.healfastusa.org` and `staff.healfastusa.org`
+- **Nginx Configuration**: Single server for **91.221.36.80** (no subdomains)
 - **SSL/TLS Support**: Certificate management and HTTPS configuration
 - **Docker Compose Override**: Seamless integration without modifying base files
 - **Environment Templates**: Pre-configured environment variables
@@ -77,7 +77,7 @@ healfast-branding/
    ```
 
 5. **Verify**
-   - Open: `https://clinic.healfastusa.org`
+   - Open: `https://91.221.36.80`
    - Check: Logo, green theme, Poppins font
 
 ## Key Features
@@ -90,8 +90,7 @@ healfast-branding/
 - ✅ White labeling configuration
 
 ### Domain Configuration
-- ✅ `clinic.healfastusa.org` - Main clinic system
-- ✅ `staff.healfastusa.org` - Staff portal
+- ✅ **91.221.36.80** - Single server (HTTPS)
 - ✅ SSL/TLS encryption for both subdomains
 - ✅ HTTP to HTTPS redirects
 
@@ -106,7 +105,7 @@ healfast-branding/
 - **OS**: Ubuntu Server 22.04 LTS (64-bit)
 - **Docker**: 20.10.13+
 - **Docker Compose**: V2
-- **DNS**: `clinic.healfastusa.org` and `staff.healfastusa.org` pointing to server
+- **Server IP**: 91.221.36.80 (no DNS required)
 - **Resources**: 4 CPU cores, 8 GB RAM, 100 GB disk
 
 ## Documentation
@@ -121,7 +120,7 @@ healfast-branding/
 For deployment assistance:
 - Review documentation files
 - Check Bahmni wiki: https://bahmni.atlassian.net/
-- Contact: support@healfastusa.org
+- Contact: see README
 
 ## Validation Checklist
 
@@ -132,8 +131,7 @@ After deployment, verify:
 - [ ] Favicon displays in browser tab
 - [ ] Green color theme applied (buttons, links, etc.)
 - [ ] Poppins font visible throughout UI
-- [ ] `https://clinic.healfastusa.org` loads correctly
-- [ ] `https://staff.healfastusa.org` loads correctly
+- [ ] `https://91.221.36.80` loads correctly
 - [ ] SSL certificates valid (no browser warnings)
 - [ ] Custom CSS loads (check browser dev tools)
 - [ ] No default Bahmni branding visible
@@ -179,8 +177,7 @@ docker compose restart bahmni-web
 ### Renewing SSL (Let's Encrypt)
 ```bash
 sudo certbot renew
-sudo cp /etc/letsencrypt/live/clinic.healfastusa.org/fullchain.pem healfast-branding/ssl/healfastusa.org.crt
-sudo cp /etc/letsencrypt/live/clinic.healfastusa.org/privkey.pem healfast-branding/ssl/healfastusa.org.key
+# If using Let's Encrypt: copy your domain's fullchain.pem and privkey.pem to healfast-branding/ssl/ as healfastusa.org.crt and .key
 docker compose restart proxy
 ```
 
@@ -205,16 +202,16 @@ openssl x509 -in healfast-branding/ssl/healfastusa.org.crt -text -noout
 docker compose logs proxy
 ```
 
-### Subdomain Not Working
+### Site not loading
 ```bash
-dig clinic.healfastusa.org
+curl -I https://91.221.36.80
 docker compose exec proxy nginx -t
 docker compose logs proxy
 ```
 
 ## Next Steps After Deployment
 
-1. Access OpenMRS admin: `https://clinic.healfastusa.org/openmrs`
+1. Access OpenMRS admin: `https://91.221.36.80/openmrs`
 2. Create users and configure roles
 3. Set up clinic locations and departments
 4. Configure clinical forms and templates

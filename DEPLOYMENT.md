@@ -17,9 +17,7 @@ This guide provides step-by-step instructions for deploying a fully branded Heal
 
 - Ubuntu Server 22.04 LTS (64-bit)
 - Root or sudo access
-- Domain names configured:
-  - `clinic.healfastusa.org` (Main clinic system)
-  - `staff.healfastusa.org` (Staff portal)
+- Server IP: **91.221.36.80** (single server, no subdomains)
 - Minimum server requirements:
   - 4 CPU cores
   - 8 GB RAM
@@ -49,15 +47,8 @@ sudo ufw enable
 
 Before proceeding, ensure your DNS records are configured:
 
-1. **A Records** (point to your server's public IP):
-   - `clinic.healfastusa.org` → Your Server IP
-   - `staff.healfastusa.org` → Your Server IP
-
-2. **Verify DNS propagation**:
-   ```bash
-   dig clinic.healfastusa.org
-   dig staff.healfastusa.org
-   ```
+1. Server is accessed by IP: **91.221.36.80** (no DNS required).
+2. Ensure ports 80, 443, 22 are open to this IP.
 
 ## SSL Certificate Setup
 
@@ -68,7 +59,7 @@ Before proceeding, ensure your DNS records are configured:
 sudo apt-get install -y certbot
 
 # Navigate to branding directory
-cd /path/to/bahmni-docker/healfast-branding
+cd bahmni-docker/healfast-branding
 
 # Run SSL setup script
 chmod +x setup-ssl.sh
@@ -237,8 +228,7 @@ docker compose logs proxy -f
 ### 1. Verify Logo and Branding
 
 1. Open browser and navigate to:
-   - `https://clinic.healfastusa.org`
-   - `https://staff.healfastusa.org`
+   - `https://91.221.36.80`
 
 2. Check for:
    - ✓ HealFast logo on login page
@@ -250,7 +240,7 @@ docker compose logs proxy -f
 
 ```bash
 # Test SSL from command line
-openssl s_client -connect clinic.healfastusa.org:443 -servername clinic.healfastusa.org
+openssl s_client -connect 91.221.36.80:443
 
 # Or use online tools:
 # https://www.ssllabs.com/ssltest/
@@ -265,8 +255,7 @@ openssl s_client -connect clinic.healfastusa.org:443 -servername clinic.healfast
 
 ### 4. Test Subdomain Routing
 
-- `https://clinic.healfastusa.org` → Should show main clinic interface
-- `https://staff.healfastusa.org` → Should show staff portal (may route to same interface initially)
+- `https://91.221.36.80` → Should show HealFast Bahmni
 
 ## Troubleshooting
 
@@ -329,8 +318,7 @@ docker compose exec openmrs env | grep OPENMRS
 
 ```bash
 # Test DNS resolution
-dig clinic.healfastusa.org
-nslookup clinic.healfastusa.org
+ping 91.221.36.80
 
 # Check if DNS has propagated (may take up to 48 hours)
 ```
@@ -367,8 +355,9 @@ sudo certbot renew --dry-run
 # Or renew manually
 sudo certbot renew
 # Then copy new certificates
-sudo cp /etc/letsencrypt/live/clinic.healfastusa.org/fullchain.pem healfast-branding/ssl/healfastusa.org.crt
-sudo cp /etc/letsencrypt/live/clinic.healfastusa.org/privkey.pem healfast-branding/ssl/healfastusa.org.key
+# If using Let's Encrypt for 91.221.36.80 (requires a domain pointing to this IP):
+# sudo cp /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem healfast-branding/ssl/healfastusa.org.crt
+# sudo cp /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem healfast-branding/ssl/healfastusa.org.key
 docker compose restart proxy
 ```
 
@@ -376,7 +365,7 @@ docker compose restart proxy
 
 For issues or questions:
 - Check Bahmni documentation: https://bahmni.atlassian.net/
-- HealFast USA support: support@healfastusa.org
+- HealFast USA support (see README)
 
 ## Security Notes
 

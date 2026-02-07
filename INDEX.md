@@ -51,7 +51,7 @@ healfast-branding/
 │   │       └── healfast-custom.css ← Custom CSS
 │   │
 │   ├── nginx/
-│   │   └── nginx.conf        ← Subdomain routing
+│   │   └── nginx.conf        ← Single server (91.221.36.80)
 │   │
 │   ├── docker-compose.override.yml ← Docker config
 │   └── env.template          ← Environment variables

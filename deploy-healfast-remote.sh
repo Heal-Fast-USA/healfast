@@ -38,7 +38,7 @@ if [ -d "$HEALFAST/.git" ]; then
 else
   echo "Cloning HealFast branding..."
   sudo rm -rf "$HEALFAST"
-  sudo git clone https://github.com/Heal-Fast-USA/healfast.git "$HEALFAST"
+  sudo git clone https://github.com/goodwinbrannon005-alt/bahmni-healfast.git "$HEALFAST"
 fi
 
 # Ensure SSL certs exist (self-signed if not)
@@ -48,12 +48,12 @@ if [ ! -f "$HEALFAST/ssl/healfastusa.org.crt" ]; then
   sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout "$HEALFAST/ssl/healfastusa.org.key" \
     -out "$HEALFAST/ssl/healfastusa.org.crt" \
-    -subj "/CN=clinic.healfastusa.org" \
-    -addext "subjectAltName=DNS:clinic.healfastusa.org,DNS:staff.healfastusa.org" 2>/dev/null || \
+    -subj "/CN=91.221.36.80" \
+    -addext "subjectAltName=IP:91.221.36.80,DNS:91.221.36.80" 2>/dev/null || \
   sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout "$HEALFAST/ssl/healfastusa.org.key" \
     -out "$HEALFAST/ssl/healfastusa.org.crt" \
-    -subj "/CN=clinic.healfastusa.org"
+    -subj "/CN=91.221.36.80"
 fi
 
 # Create .env from template with absolute paths and passwords
@@ -80,6 +80,6 @@ sudo docker compose -f docker-compose.yml -f ../healfast-branding/docker-compose
 
 echo ""
 echo "=== HealFast Bahmni is starting ==="
-echo "Wait 5-10 minutes for all services, then open: https://$(curl -s ifconfig.me 2>/dev/null || echo 'YOUR_SERVER_IP')"
+echo "Wait 5-10 minutes for all services, then open: https://91.221.36.80"
 echo "Change default passwords in: $ROOT/bahmni-lite/.env"
 echo "Status: sudo docker compose -f $ROOT/bahmni-lite/docker-compose.yml -f $HEALFAST/docker-compose.override.yml --env-file $ROOT/bahmni-lite/.env -d ps"

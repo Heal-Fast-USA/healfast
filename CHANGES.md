@@ -37,7 +37,7 @@ This document summarizes all changes made to customize Bahmni for HealFast USA.
   - Title: "HealFast USA"
   - Subtitle: "Medical Information System"
   - Custom CSS reference
-  - Help link: `https://healfastusa.org/support`
+  - Help link: configurable in whiteLabel.json
   - Bahmni branding hidden
 
 ## Infrastructure Changes
@@ -55,9 +55,7 @@ This document summarizes all changes made to customize Bahmni for HealFast USA.
 - **Features**:
   - HTTP to HTTPS redirects
   - SSL/TLS termination
-  - Subdomain routing:
-    - `clinic.healfastusa.org` → Main clinic system
-    - `staff.healfastusa.org` → Staff portal
+  - Single server: **91.221.36.80** (no subdomains)
   - Security headers
   - WebSocket support
   - Proper proxy headers
@@ -130,21 +128,17 @@ healfast-branding/
 ## Domain Configuration
 
 ### Subdomain Routing
-- **clinic.healfastusa.org**:
+- **91.221.36.80** (single server):
   - Main Bahmni web interface
   - OpenMRS API
   - Reports
+  - Implementer interface
   - Patient documents
-
-- **staff.healfastusa.org**:
-  - Same as clinic (can be customized)
-  - Implementer interface access
-  - Administrative tools
 
 ### SSL/TLS
 - Certificate location: `ssl/healfastusa.org.crt`
 - Private key: `ssl/healfastusa.org.key`
-- Supports both subdomains (SAN certificate)
+- Certificate for IP 91.221.36.80 (self-signed or your cert)
 - Security headers configured
 - TLS 1.2+ only
 

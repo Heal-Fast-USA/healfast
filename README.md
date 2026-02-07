@@ -126,13 +126,9 @@ docker compose --env-file .env up -d
 
 ### Subdomains
 
-1. **clinic.healfastusa.org** - Main clinic system
-   - Routes to: bahmni-web, openmrs, reports
-   - Primary interface for clinical staff
-
-2. **staff.healfastusa.org** - Staff portal
-   - Routes to: bahmni-web, implementer-interface
-   - Additional access for administrative staff
+**91.221.36.80** - Single server (no subdomains)
+- Routes to: bahmni-web, openmrs, reports, implementer-interface
+- Access: https://91.221.36.80
 
 ### SSL/TLS
 
@@ -221,8 +217,7 @@ After deployment, verify:
 - [ ] Favicon shows in browser tab
 - [ ] Green color theme applied (buttons, links, etc.)
 - [ ] Poppins font applied throughout UI
-- [ ] `https://clinic.healfastusa.org` loads correctly
-- [ ] `https://staff.healfastusa.org` loads correctly
+- [ ] `https://91.221.36.80` loads correctly
 - [ ] SSL certificates valid (no browser warnings)
 - [ ] Custom CSS loads (check browser dev tools)
 - [ ] No default Bahmni branding visible
@@ -264,7 +259,7 @@ ls -lh ssl/
 openssl x509 -in ssl/healfastusa.org.crt -text -noout
 
 # Test SSL connection
-openssl s_client -connect clinic.healfastusa.org:443 -servername clinic.healfastusa.org
+openssl s_client -connect 91.221.36.80:443
 ```
 
 ### Subdomain Not Routing
@@ -277,8 +272,7 @@ docker compose exec proxy nginx -t
 docker compose logs proxy
 
 # Verify DNS resolution
-dig clinic.healfastusa.org
-dig staff.healfastusa.org
+curl -I https://91.221.36.80
 ```
 
 ## Maintenance
@@ -301,8 +295,7 @@ For Let's Encrypt:
 
 ```bash
 sudo certbot renew
-sudo cp /etc/letsencrypt/live/clinic.healfastusa.org/fullchain.pem ssl/healfastusa.org.crt
-sudo cp /etc/letsencrypt/live/clinic.healfastusa.org/privkey.pem ssl/healfastusa.org.key
+# If using Let's Encrypt (domain required): copy fullchain.pem → ssl/healfastusa.org.crt, privkey.pem → ssl/healfastusa.org.key
 docker compose restart proxy
 ```
 
@@ -311,7 +304,7 @@ docker compose restart proxy
 For deployment assistance:
 - Review `DEPLOYMENT.md` for detailed instructions
 - Check Bahmni documentation: https://bahmni.atlassian.net/
-- Contact: support@healfastusa.org
+- Contact: see project support
 
 ## License
 

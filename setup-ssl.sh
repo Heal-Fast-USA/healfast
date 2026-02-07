@@ -1,6 +1,6 @@
 #!/bin/bash
 # HealFast USA - SSL Certificate Setup Script
-# This script helps set up SSL certificates for HealFast USA domains
+# Server IP: 91.221.36.80 (no subdomains)
 
 set -e
 
@@ -57,27 +57,24 @@ case $option in
             fi
             
             echo ""
-            echo "Obtaining certificates for clinic.healfastusa.org and staff.healfastusa.org..."
+            echo "Obtaining certificates (requires a domain pointing to 91.221.36.80)..."
             echo "Note: You may need to temporarily stop nginx/proxy service"
             echo ""
+            read -p "Enter your domain name (e.g. example.com): " DOMAIN
             
             # Obtain certificates
             sudo certbot certonly --standalone \
-                -d clinic.healfastusa.org \
-                -d staff.healfastusa.org \
+                -d "$DOMAIN" \
                 --email admin@healfastusa.org \
                 --agree-tos \
                 --non-interactive || {
                 echo ""
-                echo "Certbot failed. You may need to:"
-                echo "1. Ensure DNS is pointing to this server"
-                echo "2. Stop nginx/proxy service: sudo systemctl stop nginx"
-                echo "3. Run certbot manually: sudo certbot certonly --standalone -d clinic.healfastusa.org -d staff.healfastusa.org"
+                echo "Certbot failed. Ensure DNS for $DOMAIN points to 91.221.36.80 and ports 80/443 are open."
                 exit 1
             }
             
             # Copy certificates to SSL directory
-            CERT_PATH="/etc/letsencrypt/live/clinic.healfastusa.org"
+            CERT_PATH="/etc/letsencrypt/live/$DOMAIN"
             if [ -d "$CERT_PATH" ]; then
                 sudo cp "$CERT_PATH/fullchain.pem" "$SSL_DIR/healfastusa.org.crt"
                 sudo cp "$CERT_PATH/privkey.pem" "$SSL_DIR/healfastusa.org.key"
@@ -122,8 +119,12 @@ case $option in
         openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
             -keyout "$SSL_DIR/healfastusa.org.key" \
             -out "$SSL_DIR/healfastusa.org.crt" \
-            -subj "/C=US/ST=State/L=City/O=HealFast USA/CN=clinic.healfastusa.org" \
-            -addext "subjectAltName=DNS:clinic.healfastusa.org,DNS:staff.healfastusa.org"
+            -subj "/CN=91.221.36.80" \
+            -addext "subjectAltName=IP:91.221.36.80,DNS:91.221.36.80" 2>/dev/null || \
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+            -keyout "$SSL_DIR/healfastusa.org.key" \
+            -out "$SSL_DIR/healfastusa.org.crt" \
+            -subj "/CN=91.221.36.80"
         
         chmod 644 "$SSL_DIR/healfastusa.org.crt"
         chmod 600 "$SSL_DIR/healfastusa.org.key"
