@@ -26,7 +26,7 @@ services:
     environment:
       TZ: ${TZ:-America/New_York}
 
-  # Override bahmni-config: image's start.sh copies between /etc and /usr/local; they are the same inode in the image (symlink). Use TWO separate host dirs (config + config_etc) so the container sees two distinct paths.
+  # Override bahmni-config: two host dirs (config + config_etc). If still "same file", run without it: docker compose ... up -d --scale bahmni-config=0 (openmrs/bahmni-web get config from CONFIG_VOLUME).
   bahmni-config:
     volumes:
       - '${CONFIG_VOLUME:-./healfast-branding/config}:/usr/local/bahmni_config:ro'

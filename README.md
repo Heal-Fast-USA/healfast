@@ -32,6 +32,10 @@ healfast-branding/
 
 If the server is already running and you want to apply the latest config (e.g. fix bahmni-config “same file”, proxy): **[UPDATE.md](UPDATE.md)** — clone or pull this repo on the server, then run `sudo bash update-server.sh`.
 
+## Achieving full functionality
+
+To get all services **Up**, branding working, and clinic/staff URLs and reports working: **[FULL-FUNCTIONALITY.md](FULL-FUNCTIONALITY.md)** — checklist to fix bahmni-config, reports, proxy, DNS, and optional “no clinic-config” approach.
+
 ## Quick Start
 
 ### 1. Initialize Branding
