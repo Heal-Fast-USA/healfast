@@ -15,5 +15,32 @@
     "title_text": "HealFast USA",
     "subTitle": "Medical Information System"
   },
-  "landingPage": []
+  "loginPage": {
+    "logo": "/bahmni_config/openmrs/apps/home/logo.png",
+    "showHeaderText": true,
+    "showTitleText": true
+  },
+  "landingPage": [
+    {
+      "enabled": true,
+      "name": "clinicalService",
+      "title": "Clinical",
+      "logo": "/bahmni/images/app.png",
+      "link": "/bahmni/home"
+    },
+    {
+      "enabled": true,
+      "name": "implementer",
+      "title": "Implementer",
+      "logo": "/bahmni/images/bills.png",
+      "link": "/implementer-interface/"
+    },
+    {
+      "enabled": true,
+      "name": "reports",
+      "title": "Reports",
+      "logo": "/bahmni/images/analytics.png",
+      "link": "/bahmni-reports/"
+    }
+  ]
 }
