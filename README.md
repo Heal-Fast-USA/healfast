@@ -109,9 +109,18 @@ Config (logo, CSS, whiteLabel) is served by nginx at `/bahmni_config/` so it app
 
 Point **clinic.healfastusa.org** and **staff.healfastusa.org** to your server IP (69.30.247.92).
 
-## Mixed content (HTTPS)
+## Mixed content (HTTPS) – "requested an insecure XMLHttpRequest endpoint"
 
-If the app requests `http://...` on an HTTPS page, set OpenMRS base URL to HTTPS:
+The app must use HTTPS for API calls. Set OpenMRS base URL to HTTPS:
 
-1. Open **https://clinic.healfastusa.org/openmrs** → Advanced Settings → Global Property.
-2. Set **bahmni.baseUrl** to **https://clinic.healfastusa.org** (no trailing slash). Save and hard-refresh.
+1. **Manual:** Open **https://clinic.healfastusa.org/openmrs** (or staff) → log in as admin → **Advanced Settings → Global Property** → set **bahmni.baseUrl** to **https://clinic.healfastusa.org** (or **https://staff.healfastusa.org**) with no trailing slash. Save and hard-refresh.
+2. **Script (if REST supports it):** `OPENMRS_PASS=your_admin_password BASE_URL=https://staff.healfastusa.org bash scripts/set-baseurl-https.sh`
+
+## CSP / ChunkLoadError (script blocked, loading forever)
+
+If you see "Loading the script ... violates the following Content Security Policy" or "ChunkLoadError: Loading chunk failed", it is often a **browser extension** (e.g. password manager, ad blocker) injecting a strict CSP. Try:
+
+- Open the site in an **incognito/private window** (extensions usually disabled), or  
+- Disable extensions for **staff.healfastusa.org** / **clinic.healfastusa.org**.
+
+The server sends a permissive CSP so app scripts can load; if the error persists, the block is from the extension.

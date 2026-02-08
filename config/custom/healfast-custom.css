@@ -367,6 +367,42 @@ p, span, div, label, input, textarea, select, button {
   padding-bottom: 60px !important;
 }
 
+/* ========== Replace "Bahmni" with "HealFast USA" across the system ========== */
+.power-by,
+.page-footer .powered-by,
+[class*="power-by"] {
+  font-size: 0 !important;
+}
+.power-by::after,
+.page-footer .powered-by::after,
+[class*="power-by"]::after {
+  font-size: 13px !important;
+  content: "HealFast USA" !important;
+  font-weight: 500 !important;
+}
+/* Hide any visible "Bahmni" label in headers/titles (title_text already empty in whiteLabel) */
+.bahmni-logo-text,
+.brand-name,
+[class*="bahmni"][class*="title"],
+header .title {
+  font-size: 0 !important;
+}
+header .title::after {
+  content: "HealFast USA" !important;
+  font-size: inherit !important;
+}
+/* Login/landing: ensure no Bahmni text shows */
+.login-container .title,
+.login-page .brand-text {
+  visibility: hidden !important;
+}
+.login-container .title::after,
+.login-page .brand-text::after {
+  content: "HealFast USA" !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
 /* ========== Preloader / loading spinner fix (dashboard never opening) ========== */
 /* Ensure dashboard content is visible; hide loader once content exists */
 #dashboard-content .loader,
