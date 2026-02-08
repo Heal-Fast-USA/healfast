@@ -366,3 +366,43 @@ p, span, div, label, input, textarea, select, button {
 .container {
   padding-bottom: 60px !important;
 }
+
+/* ========== Preloader / loading spinner fix (dashboard never opening) ========== */
+/* Ensure dashboard content is visible; hide loader once content exists */
+#dashboard-content .loader,
+#dashboard-content .loading-spinner,
+.bahmni-home .loader,
+.bahmni-home .loading-spinner,
+.dashboard-container .loader,
+.dashboard-container .loading-spinner {
+  display: none !important;
+}
+/* Common Bahmni/Angular loader classes - hide when dashboard section is present */
+.dashboard-section ~ .loader,
+.dashboard-section ~ .loading,
+.section ~ .loader,
+.section ~ .loading,
+.loader.ng-hide,
+.loading.ng-hide {
+  display: none !important;
+}
+/* Fallback: hide full-page loader after 10s so dashboard can show (if app never fires "loaded") */
+.loader-container,
+.loading-container,
+.spinner-overlay,
+.full-page-loader {
+  animation: healfast-hide-loader 10s forwards;
+}
+@keyframes healfast-hide-loader {
+  0%, 92% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+/* Ensure dashboard and home sections are visible (override any loading overlay) */
+#dashboard-content,
+.bahmni-home .dashboard-section,
+.bahmni-home .section,
+.dashboard-section,
+.tile {
+  opacity: 1 !important;
+  visibility: visible !important;
+}

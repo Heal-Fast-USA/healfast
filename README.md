@@ -17,6 +17,13 @@ sudo bash fix-all.sh --letsencrypt
 
 (Requires DNS for clinic.healfastusa.org and staff.healfastusa.org pointing to the server.)
 
+**Pull and fix (after git updates):**
+```bash
+cd /opt/bahmni-docker/healfast-branding
+sudo bash pull-and-fix.sh
+# or with Let's Encrypt:  sudo bash pull-and-fix.sh --letsencrypt
+```
+
 Alternatively, use **fix-and-start.sh** for the same steps without Certbot.
 
 This script:
@@ -74,8 +81,14 @@ sudo certbot renew --dry-run
 
 ---
 
+## Branding and dashboard (/bahmni/home/#/dashboard)
+
+Config (logo, CSS, whiteLabel) is served by nginx at `/bahmni_config/` so it applies to both clinic and staff. If the dashboard keeps loading (spinner never stops), the custom CSS includes a fallback that hides the loader after ~10s so the page can show. Ensure **fix-and-start.sh** or **pull-and-fix.sh** has been run so config is synced and the proxy is reloaded.
+
 ## Repo layout
 
+- **pull-and-fix.sh** – git pull then fix-all (run after updates)
+- **fix-all.sh** – fix paths, SSL, stack, optional Certbot
 - **fix-and-start.sh** – fix paths, SSL, and start stack
 - **scripts/install-certbot.sh** – install Certbot (apt)
 - **scripts/obtain-letsencrypt.sh** – obtain/renew Let's Encrypt cert and copy to `ssl/`
