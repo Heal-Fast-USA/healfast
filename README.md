@@ -111,10 +111,15 @@ Point **clinic.healfastusa.org** and **staff.healfastusa.org** to your server IP
 
 ## Mixed content (HTTPS) – "requested an insecure XMLHttpRequest endpoint"
 
-The app must use HTTPS for API calls. Set OpenMRS base URL to HTTPS:
+The app must use HTTPS for API calls. **fix-and-start.sh** and **pull-and-fix.sh** now run **scripts/set-baseurl-https-db.sh**, which sets **bahmni.baseUrl** in the OpenMRS database to the value of **BAHMNI_BASE_URL** in `.env` (default **https://staff.healfastusa.org**).
 
-1. **Manual:** Open **https://clinic.healfastusa.org/openmrs** (or staff) → log in as admin → **Advanced Settings → Global Property** → set **bahmni.baseUrl** to **https://clinic.healfastusa.org** (or **https://staff.healfastusa.org**) with no trailing slash. Save and hard-refresh.
-2. **Script (if REST supports it):** `OPENMRS_PASS=your_admin_password BASE_URL=https://staff.healfastusa.org bash scripts/set-baseurl-https.sh`
+- **Staff:** Leave default or set in bahmni-lite `.env`: `BAHMNI_BASE_URL=https://staff.healfastusa.org`
+- **Clinic only:** Set `BAHMNI_BASE_URL=https://clinic.healfastusa.org` in `.env`, then run **fix-and-start.sh** or **pull-and-fix.sh** again.
+
+After running, hard-refresh the browser (Ctrl+F5). If mixed content persists:
+
+1. **Manual:** Open **https://staff.healfastusa.org/openmrs** → Admin → **Advanced Settings → Global Property** → set **bahmni.baseUrl** to **https://staff.healfastusa.org** (no trailing slash). Save and hard-refresh.
+2. **Run DB script alone:** `cd healfast-branding && BAHMNI_BASE_URL=https://staff.healfastusa.org bash scripts/set-baseurl-https-db.sh`
 
 ## CSP / ChunkLoadError (script blocked, loading forever)
 

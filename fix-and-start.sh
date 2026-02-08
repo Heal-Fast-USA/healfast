@@ -96,6 +96,12 @@ if docker ps --format '{{.Names}}' | grep -q openmrsdb; then
   $COMPOSE restart reports 2>/dev/null || true
 fi
 
+# 6) Set OpenMRS base URL to HTTPS in DB (fixes mixed content: app requested http://.../openmrs/initialsetup)
+if [ -f "$HEALFAST/scripts/set-baseurl-https-db.sh" ]; then
+  echo "[6/6] Setting OpenMRS base URL to HTTPS in database (from BAHMNI_BASE_URL or default staff)..."
+  bash "$HEALFAST/scripts/set-baseurl-https-db.sh" 2>/dev/null || true
+fi
+
 echo ""
 echo "=== Done ==="
 echo "SSL:    $HEALFAST/ssl -> proxy /etc/nginx/ssl (absolute path in .env)"
