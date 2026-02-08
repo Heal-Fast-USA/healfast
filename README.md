@@ -81,6 +81,15 @@ sudo certbot renew --dry-run
 
 ---
 
+## /bahmni-reports/ not working
+
+Reports are served at **https://.../bahmni-reports/** (and **/bahmni/reports/** from the dashboard link). Ensure:
+
+1. **Profiles:** `.env` has `COMPOSE_PROFILES=emr,bahmni-lite` so the `reports` and `reportsdb` services start.
+2. **After fix-and-start:** Run `sudo bash fix-and-start.sh` or `sudo bash pull-and-fix.sh`; they restart reports and run `scripts/ensure-reports-running.sh`.
+3. **502 on /bahmni-reports/:** The reports container may listen on **8080** instead of **8050**. In `nginx/nginx.conf`, change `set $reports_backend reports:8050;` to `set $reports_backend reports:8080;` in both server blocks, then `docker compose restart proxy`.
+4. **Check containers:** `docker ps | grep reports` should show `reports` and `reportsdb` running. If not, run `docker compose -f bahmni-lite/docker-compose.yml -f healfast-branding/docker-compose.override.yml --env-file bahmni-lite/.env up -d reports reportsdb`.
+
 ## Branding and dashboard (/bahmni/home/#/dashboard)
 
 Config (logo, CSS, whiteLabel) is served by nginx at `/bahmni_config/` so it applies to both clinic and staff. If the dashboard keeps loading (spinner never stops), the custom CSS includes a fallback that hides the loader after ~10s so the page can show. Ensure **fix-and-start.sh** or **pull-and-fix.sh** has been run so config is synced and the proxy is reloaded.

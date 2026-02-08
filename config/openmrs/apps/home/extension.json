@@ -34,7 +34,7 @@
     "extensionPointId": "org.bahmni.home.dashboard",
     "type": "link",
     "translationKey": "MODULE_LABEL_REPORTS_KEY",
-    "url": "../reports/#/dashboard",
+    "url": "/bahmni-reports/#/dashboard",
     "icon": "icon-bahmni-reports",
     "order": 8,
     "requiredPrivilege": "app:reports"

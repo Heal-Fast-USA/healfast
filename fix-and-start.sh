@@ -91,9 +91,14 @@ if [ -z "$ROOT_PASS" ]; then
   ROOT_PASS="${MYSQL_ROOT_PASSWORD:-HealFast2024Secure}"
 fi
 sleep 10
-if docker ps --format '{{.Names}}' | grep -q openmrsdb; then
-  docker exec bahmni-lite-openmrsdb-1 mysql -u root -p"$ROOT_PASS" -e "ALTER USER 'openmrs'@'%' IDENTIFIED BY '$OPENMRS_PASS'; FLUSH PRIVILEGES;" 2>/dev/null || true
+OPENMRSDB_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E 'openmrsdb|openmrs-db' | head -1)
+if [ -n "$OPENMRSDB_CONTAINER" ]; then
+  docker exec "$OPENMRSDB_CONTAINER" mysql -u root -p"$ROOT_PASS" -e "ALTER USER 'openmrs'@'%' IDENTIFIED BY '$OPENMRS_PASS'; FLUSH PRIVILEGES;" 2>/dev/null || true
   $COMPOSE restart reports 2>/dev/null || true
+fi
+# Ensure reports and reportsdb are up (profile bahmni-lite)
+if [ -f "$HEALFAST/scripts/ensure-reports-running.sh" ]; then
+  bash "$HEALFAST/scripts/ensure-reports-running.sh" 2>/dev/null || true
 fi
 
 # 6) Set OpenMRS base URL to HTTPS in DB (fixes mixed content: app requested http://.../openmrs/initialsetup)
