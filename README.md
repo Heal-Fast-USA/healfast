@@ -32,7 +32,7 @@ This script:
 - Creates **self-signed SSL** in `ssl/` if missing (proxy mounts it at `/etc/nginx/ssl`); replace with Let's Encrypt (see below)
 - Sets **absolute** paths in `.env`: HEALFAST_BRANDING_PATH, CONFIG_VOLUME, CONFIG_VOLUME_ETC, CERTIFICATE_PATH
 - Starts the stack **without** bahmni-config (avoids restart loop)
-- Fixes OpenMRS DB password for reports
+- Fixes OpenMRS DB user (openmrs@'%' / openmrs@'localhost') so OpenMRS/Liquibase and reports can connect
 
 **Customization:** `/bahmni_config/` (logo, CSS, whiteLabel) is served by nginx from the config folder so branding applies reliably.
 
@@ -93,6 +93,14 @@ Reports are served at **https://.../bahmni-reports/** (and **/bahmni/reports/** 
    - `docker logs bahmni-lite-reports-1 --tail 100` to see the error (e.g. DB auth, OpenMRS connection). Ensure `.env` has `OPENMRS_HOST=openmrs`, `OPENMRS_PORT=8080`, and `REPORTS_DB_*` matching what reportsdb was created with.
 5. **Check containers:** `docker ps | grep reports` should show `reports` and `reportsdb` running. If not, run `docker compose -f bahmni-lite/docker-compose.yml -f healfast-branding/docker-compose.override.yml --env-file bahmni-lite/.env up -d reports reportsdb`.
 
+## Liquibase / OpenMRS "Access denied for user 'openmrs'@'...'"
+
+If OpenMRS or Liquibase fails with **Access denied for user 'openmrs'@'172.x.x.x' (using password: YES)**:
+
+1. Ensure **bahmni-lite/.env** has `OPENMRS_DB_PASSWORD` and `MYSQL_ROOT_PASSWORD` set (and that they match what the DB was created with, or use the same value you intend to use).
+2. Run **fix-and-start.sh** or **pull-and-fix.sh**; they call **scripts/fix-openmrs-db-password.sh** and then restart OpenMRS so it reconnects with the correct password.
+3. To run only the DB fix: `cd healfast-branding && bash scripts/fix-openmrs-db-password.sh`, then `docker compose ... restart openmrs` (from the directory where you run compose).
+
 ## Branding and dashboard (/bahmni/home/#/dashboard)
 
 Config (logo, CSS, whiteLabel) is served by nginx at `/bahmni_config/` so it applies to both clinic and staff. If the dashboard keeps loading (spinner never stops), the custom CSS includes a fallback that hides the loader after ~10s so the page can show. Ensure **fix-and-start.sh** or **pull-and-fix.sh** has been run so config is synced and the proxy is reloaded.
@@ -105,6 +113,7 @@ Config (logo, CSS, whiteLabel) is served by nginx at `/bahmni_config/` so it app
 - **scripts/install-certbot.sh** – install Certbot (apt)
 - **scripts/obtain-letsencrypt.sh** – obtain/renew Let's Encrypt cert and copy to `ssl/`
 - **scripts/copy-certs-and-reload.sh** – copy certs and reload nginx (used by renew hook)
+- **scripts/fix-openmrs-db-password.sh** – ensure MySQL user openmrs@'%' / openmrs@'localhost' exists with OPENMRS_DB_PASSWORD (fixes Liquibase "Access denied")
 - **config/** – logo, favicon, whiteLabel.json, healfast-custom.css
 - **nginx/nginx.conf** – proxy + ACME challenge for Certbot
 - **docker-compose.override.yml** – proxy (ssl + acme-webroot), bahmni-web, bahmni-config overrides

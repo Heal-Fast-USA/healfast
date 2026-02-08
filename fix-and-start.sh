@@ -80,20 +80,20 @@ echo "[4/5] Starting containers (bahmni-config disabled)..."
 cd "$BAHMNI_LITE"
 $COMPOSE up -d --scale bahmni-config=0
 
-# 5) Fix reports: align OpenMRS DB user password with .env, then restart reports
-echo "[5/5] Fixing OpenMRS DB password for reports..."
-OPENMRS_PASS=$(grep '^OPENMRS_DB_PASSWORD=' "$ENV_FILE" 2>/dev/null | cut -d= -f2- | tr -d '"' | tr -d "'")
-ROOT_PASS=$(grep '^MYSQL_ROOT_PASSWORD=' "$ENV_FILE" 2>/dev/null | cut -d= -f2- | tr -d '"' | tr -d "'")
-if [ -z "$OPENMRS_PASS" ] || [ "$OPENMRS_PASS" = "CHANGE_ME_OPENMRS_DB_PASSWORD" ]; then
-  OPENMRS_PASS="${OPENMRS_DB_PASSWORD:-HealFast2024Secure}"
-fi
-if [ -z "$ROOT_PASS" ]; then
-  ROOT_PASS="${MYSQL_ROOT_PASSWORD:-HealFast2024Secure}"
-fi
+# 5) Fix OpenMRS DB user password first (so OpenMRS/Liquibase can connect), then reports
+echo "[5/6] Fixing OpenMRS DB password (openmrs user)..."
 sleep 10
-OPENMRSDB_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E 'openmrsdb|openmrs-db' | head -1)
-if [ -n "$OPENMRSDB_CONTAINER" ]; then
-  docker exec "$OPENMRSDB_CONTAINER" mysql -u root -p"$ROOT_PASS" -e "ALTER USER 'openmrs'@'%' IDENTIFIED BY '$OPENMRS_PASS'; FLUSH PRIVILEGES;" 2>/dev/null || true
+if [ -f "$HEALFAST/scripts/fix-openmrs-db-password.sh" ]; then
+  bash "$HEALFAST/scripts/fix-openmrs-db-password.sh" 2>/dev/null || true
+  $COMPOSE restart openmrs 2>/dev/null || true
+else
+  OPENMRS_PASS=$(grep '^OPENMRS_DB_PASSWORD=' "$ENV_FILE" 2>/dev/null | cut -d= -f2- | tr -d '"' | tr -d "'")
+  ROOT_PASS=$(grep '^MYSQL_ROOT_PASSWORD=' "$ENV_FILE" 2>/dev/null | cut -d= -f2- | tr -d '"' | tr -d "'")
+  [ -z "$OPENMRS_PASS" ] || [ "$OPENMRS_PASS" = "CHANGE_ME_OPENMRS_DB_PASSWORD" ] && OPENMRS_PASS="${OPENMRS_DB_PASSWORD:-HealFast2024Secure}"
+  [ -z "$ROOT_PASS" ] && ROOT_PASS="${MYSQL_ROOT_PASSWORD:-HealFast2024Secure}"
+  OPENMRSDB_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E 'openmrsdb|openmrs-db' | head -1)
+  [ -n "$OPENMRSDB_CONTAINER" ] && docker exec "$OPENMRSDB_CONTAINER" mysql -u root -p"$ROOT_PASS" -e "ALTER USER 'openmrs'@'%' IDENTIFIED BY '$OPENMRS_PASS'; FLUSH PRIVILEGES;" 2>/dev/null || true
+  $COMPOSE restart openmrs 2>/dev/null || true
 fi
 # Fix reports DB user so reports container can connect (stops restart loop)
 if [ -f "$HEALFAST/scripts/fix-reports-db.sh" ]; then
