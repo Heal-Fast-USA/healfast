@@ -94,8 +94,12 @@ sleep 10
 OPENMRSDB_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E 'openmrsdb|openmrs-db' | head -1)
 if [ -n "$OPENMRSDB_CONTAINER" ]; then
   docker exec "$OPENMRSDB_CONTAINER" mysql -u root -p"$ROOT_PASS" -e "ALTER USER 'openmrs'@'%' IDENTIFIED BY '$OPENMRS_PASS'; FLUSH PRIVILEGES;" 2>/dev/null || true
-  $COMPOSE restart reports 2>/dev/null || true
 fi
+# Fix reports DB user so reports container can connect (stops restart loop)
+if [ -f "$HEALFAST/scripts/fix-reports-db.sh" ]; then
+  bash "$HEALFAST/scripts/fix-reports-db.sh" 2>/dev/null || true
+fi
+$COMPOSE restart reports 2>/dev/null || true
 # Ensure reports and reportsdb are up (profile bahmni-lite)
 if [ -f "$HEALFAST/scripts/ensure-reports-running.sh" ]; then
   bash "$HEALFAST/scripts/ensure-reports-running.sh" 2>/dev/null || true

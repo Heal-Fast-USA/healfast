@@ -88,7 +88,10 @@ Reports are served at **https://.../bahmni-reports/** (and **/bahmni/reports/** 
 1. **Profiles:** `.env` has `COMPOSE_PROFILES=emr,bahmni-lite` so the `reports` and `reportsdb` services start.
 2. **After fix-and-start:** Run `sudo bash fix-and-start.sh` or `sudo bash pull-and-fix.sh`; they restart reports and run `scripts/ensure-reports-running.sh`.
 3. **502 on /bahmni-reports/:** The reports container may listen on **8080** instead of **8050**. In `nginx/nginx.conf`, change `set $reports_backend reports:8050;` to `set $reports_backend reports:8080;` in both server blocks, then `docker compose restart proxy`.
-4. **Check containers:** `docker ps | grep reports` should show `reports` and `reportsdb` running. If not, run `docker compose -f bahmni-lite/docker-compose.yml -f healfast-branding/docker-compose.override.yml --env-file bahmni-lite/.env up -d reports reportsdb`.
+4. **Reports container restarting:** If `docker ps` shows reports as "Restarting", the app is crashing. Run:
+   - `bash scripts/fix-reports-db.sh` to sync the reports DB user/password from `.env` (often fixes connection refused).
+   - `docker logs bahmni-lite-reports-1 --tail 100` to see the error (e.g. DB auth, OpenMRS connection). Ensure `.env` has `OPENMRS_HOST=openmrs`, `OPENMRS_PORT=8080`, and `REPORTS_DB_*` matching what reportsdb was created with.
+5. **Check containers:** `docker ps | grep reports` should show `reports` and `reportsdb` running. If not, run `docker compose -f bahmni-lite/docker-compose.yml -f healfast-branding/docker-compose.override.yml --env-file bahmni-lite/.env up -d reports reportsdb`.
 
 ## Branding and dashboard (/bahmni/home/#/dashboard)
 
