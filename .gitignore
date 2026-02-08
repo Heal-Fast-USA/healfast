@@ -46,6 +46,9 @@ volumes/
 # Synced copy of config (created by fix-and-start.sh)
 config_etc/
 
+# Certbot / Let's Encrypt webroot (created by fix-and-start.sh; certbot writes here)
+acme-webroot/
+
 # Node modules (if any)
 node_modules/
 

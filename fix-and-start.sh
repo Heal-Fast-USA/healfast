@@ -22,27 +22,32 @@ if [ ! -d "$BAHMNI_LITE" ]; then
   exit 1
 fi
 
-# 1) Sync config -> config_etc (two dirs so bahmni-config would not hit 'same file'; we run without that container)
+# 1) Sync config -> config_etc; create acme-webroot for Certbot (Let's Encrypt)
 mkdir -p "$HEALFAST/config_etc"
+mkdir -p "$HEALFAST/acme-webroot"
 rsync -a --delete "$HEALFAST/config/" "$HEALFAST/config_etc/" 2>/dev/null || cp -r "$HEALFAST/config"/. "$HEALFAST/config_etc/"
-echo "[1/5] Synced config -> config_etc"
+echo "[1/5] Synced config -> config_etc; acme-webroot ready for Certbot"
 
-# 2) SSL: create self-signed if missing
-mkdir -p "$HEALFAST/ssl"
-if [ ! -f "$HEALFAST/ssl/healfastusa.org.crt" ] || [ ! -f "$HEALFAST/ssl/healfastusa.org.key" ]; then
-  echo "[2/5] Creating self-signed SSL (clinic/staff.healfastusa.org, IP 69.30.247.92)..."
-  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout "$HEALFAST/ssl/healfastusa.org.key" \
-    -out "$HEALFAST/ssl/healfastusa.org.crt" \
+# 2) SSL: create self-signed if missing; use absolute path so proxy mount works
+SSL_DIR="$HEALFAST/ssl"
+SSL_CERT="$SSL_DIR/healfastusa.org.crt"
+SSL_KEY="$SSL_DIR/healfastusa.org.key"
+mkdir -p "$SSL_DIR"
+if [ ! -f "$SSL_CERT" ] || [ ! -f "$SSL_KEY" ] || [ ! -s "$SSL_CERT" ] || [ ! -s "$SSL_KEY" ]; then
+  echo "[2/5] Creating self-signed SSL in $SSL_DIR (clinic/staff.healfastusa.org)..."
+  ( openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout "$SSL_KEY" -out "$SSL_CERT" \
     -subj "/CN=clinic.healfastusa.org" \
-    -addext "subjectAltName=DNS:clinic.healfastusa.org,DNS:staff.healfastusa.org,IP:69.30.247.92" 2>/dev/null || \
-  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout "$HEALFAST/ssl/healfastusa.org.key" \
-    -out "$HEALFAST/ssl/healfastusa.org.crt" \
-    -subj "/CN=clinic.healfastusa.org"
-else
-  echo "[2/5] SSL certs already present"
+    -addext "subjectAltName=DNS:clinic.healfastusa.org,DNS:staff.healfastusa.org,IP:69.30.247.92" 2>/dev/null ) || \
+  ( openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout "$SSL_KEY" -out "$SSL_CERT" \
+    -subj "/CN=clinic.healfastusa.org" )
 fi
+if [ ! -s "$SSL_CERT" ] || [ ! -s "$SSL_KEY" ]; then
+  echo "Error: SSL cert or key missing/invalid at $SSL_DIR. Fix and re-run."
+  exit 1
+fi
+echo "[2/5] SSL OK: $SSL_CERT (mounted in proxy as /etc/nginx/ssl)"
 
 # 3) .env: create or update paths
 if [ ! -f "$ENV_FILE" ]; then
@@ -54,11 +59,13 @@ if [ ! -f "$ENV_FILE" ]; then
     exit 1
   fi
 fi
-for key in HEALFAST_BRANDING_PATH CONFIG_VOLUME CONFIG_VOLUME_ETC; do
+# All paths must be absolute so Docker mounts work when compose runs from bahmni-lite
+for key in HEALFAST_BRANDING_PATH CONFIG_VOLUME CONFIG_VOLUME_ETC CERTIFICATE_PATH; do
   case "$key" in
     HEALFAST_BRANDING_PATH) val="$HEALFAST" ;;
     CONFIG_VOLUME)          val="$HEALFAST/config" ;;
     CONFIG_VOLUME_ETC)      val="$HEALFAST/config_etc" ;;
+    CERTIFICATE_PATH)       val="$HEALFAST/ssl" ;;
   esac
   if grep -q "^${key}=" "$ENV_FILE" 2>/dev/null; then
     sed -i "s|^${key}=.*|${key}=$val|" "$ENV_FILE"
@@ -66,7 +73,7 @@ for key in HEALFAST_BRANDING_PATH CONFIG_VOLUME CONFIG_VOLUME_ETC; do
     echo "${key}=$val" >> "$ENV_FILE"
   fi
 done
-echo "[3/5] .env paths set"
+echo "[3/5] .env paths set (HEALFAST_BRANDING_PATH=$HEALFAST, SSL=$HEALFAST/ssl)"
 
 # 4) Start stack without bahmni-config (avoids 'same file' restart loop)
 echo "[4/5] Starting containers (bahmni-config disabled)..."
@@ -91,6 +98,9 @@ fi
 
 echo ""
 echo "=== Done ==="
-echo "Check:  docker ps -a"
+echo "SSL:    $HEALFAST/ssl -> proxy /etc/nginx/ssl (absolute path in .env)"
+echo "Config: $HEALFAST/config -> bahmni-web + nginx /bahmni_config/"
 echo "URLs:   https://clinic.healfastusa.org   https://staff.healfastusa.org"
-echo "If proxy or reports still restart, see logs: docker logs bahmni-lite-proxy-1 --tail 20"
+echo "Check:  docker ps -a"
+echo "If pages don't load or cert errors: ensure DNS points to this server and run this script from healfast-branding dir."
+echo "If proxy fails: docker logs bahmni-lite-proxy-1 --tail 30"
