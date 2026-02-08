@@ -123,7 +123,7 @@ Point **clinic.healfastusa.org** and **staff.healfastusa.org** to your server IP
 
 ## Mixed content (HTTPS) – "requested an insecure XMLHttpRequest endpoint"
 
-The app must use HTTPS for API calls. **fix-and-start.sh** and **pull-and-fix.sh** now run **scripts/set-baseurl-https-db.sh**, which sets **bahmni.baseUrl** in the OpenMRS database to the value of **BAHMNI_BASE_URL** in `.env` (default **https://staff.healfastusa.org**).
+The app must use HTTPS for API calls. **fix-and-start.sh** and **pull-and-fix.sh** run **scripts/set-baseurl-https-db.sh**, which sets in the OpenMRS database: **bahmni.baseUrl**, **webservices.rest.uriPrefix**, and **referenceapplication.redirectUri** to **BAHMNI_BASE_URL** from `.env` (default **https://staff.healfastusa.org**). OpenMRS is then restarted so it picks up the new values.
 
 - **Staff:** Leave default or set in bahmni-lite `.env`: `BAHMNI_BASE_URL=https://staff.healfastusa.org`
 - **Clinic only:** Set `BAHMNI_BASE_URL=https://clinic.healfastusa.org` in `.env`, then run **fix-and-start.sh** or **pull-and-fix.sh** again.

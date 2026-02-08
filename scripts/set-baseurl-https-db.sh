@@ -34,21 +34,25 @@ if [ -z "$CONTAINER" ]; then
   exit 1
 fi
 
-echo "Setting OpenMRS base URL to $BAHMNI_BASE_URL (fixes mixed content for initialsetup)"
+OPENMRS_BASE="${BAHMNI_BASE_URL}/openmrs"
+
+echo "Setting OpenMRS base URLs to HTTPS: $BAHMNI_BASE_URL and $OPENMRS_BASE"
 echo "Container: $CONTAINER  DB: $OPENMRS_DB_NAME"
 
-# OpenMRS global_property: Bahmni reads bahmni.baseUrl; must be https so browser doesn't block mixed content
+# Update existing rows (fixes mixed content for initialsetup, implementer-interface, REST links)
 docker exec "$CONTAINER" mysql -u root -p"$ROOT_PASS" "$OPENMRS_DB_NAME" -e "
   UPDATE global_property SET property_value = '$BAHMNI_BASE_URL' WHERE property = 'bahmni.baseUrl';
-" 2>/dev/null && echo "Updated bahmni.baseUrl in database." || true
+  UPDATE global_property SET property_value = '$OPENMRS_BASE' WHERE property = 'webservices.rest.uriPrefix';
+  UPDATE global_property SET property_value = '$BAHMNI_BASE_URL' WHERE property = 'referenceapplication.redirectUri';
+" 2>/dev/null && echo "Updated base URL properties." || true
 
-# If property did not exist, insert it (some installs may not have it yet)
+# If bahmni.baseUrl did not exist, insert it
 AFFECTED=$(docker exec "$CONTAINER" mysql -u root -p"$ROOT_PASS" "$OPENMRS_DB_NAME" -sN -e "SELECT COUNT(*) FROM global_property WHERE property = 'bahmni.baseUrl';" 2>/dev/null || echo "0")
 if [ "$AFFECTED" = "0" ]; then
   docker exec "$CONTAINER" mysql -u root -p"$ROOT_PASS" "$OPENMRS_DB_NAME" -e "
-    INSERT INTO global_property (property, property_value, description) VALUES ('bahmni.baseUrl', '$BAHMNI_BASE_URL', 'Base URL for API (HTTPS)');
-  " 2>/dev/null && echo "Inserted bahmni.baseUrl." || echo "Insert failed; set manually in OpenMRS Admin → Advanced Settings → Global Property."
+    INSERT INTO global_property (property, property_value, description) VALUES ('bahmni.baseUrl', '$BAHMNI_BASE_URL', 'HTTPS base');
+  " 2>/dev/null && echo "Inserted bahmni.baseUrl." || true
 fi
 
-echo "Done. Hard-refresh the browser (Ctrl+F5); if still http, set in OpenMRS Admin → Advanced Settings → Global Property → bahmni.baseUrl = $BAHMNI_BASE_URL"
+echo "Done. OpenMRS will be restarted by fix-and-start so it picks up changes. Hard-refresh the browser (Ctrl+F5)."
 exit 0

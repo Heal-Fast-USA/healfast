@@ -105,10 +105,11 @@ if [ -f "$HEALFAST/scripts/ensure-reports-running.sh" ]; then
   bash "$HEALFAST/scripts/ensure-reports-running.sh" 2>/dev/null || true
 fi
 
-# 6) Set OpenMRS base URL to HTTPS in DB (fixes mixed content: app requested http://.../openmrs/initialsetup)
+# 6) Set OpenMRS base URL to HTTPS in DB (fixes mixed content: initialsetup, implementer-interface, etc.)
 if [ -f "$HEALFAST/scripts/set-baseurl-https-db.sh" ]; then
-  echo "[6/6] Setting OpenMRS base URL to HTTPS in database (from BAHMNI_BASE_URL or default staff)..."
+  echo "[6/6] Setting OpenMRS base URL to HTTPS in database (bahmni.baseUrl, webservices.rest.uriPrefix)..."
   bash "$HEALFAST/scripts/set-baseurl-https-db.sh" 2>/dev/null || true
+  $COMPOSE restart openmrs 2>/dev/null || true
 fi
 
 echo ""
