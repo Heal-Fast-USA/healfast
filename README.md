@@ -97,9 +97,12 @@ Reports are served at **https://.../bahmni-reports/** (and **/bahmni/reports/** 
 
 If OpenMRS or Liquibase fails with **Access denied for user 'openmrs'@'172.x.x.x' (using password: YES)**:
 
-1. Ensure **bahmni-lite/.env** has `OPENMRS_DB_PASSWORD` and `MYSQL_ROOT_PASSWORD` set (and that they match what the DB was created with, or use the same value you intend to use).
-2. Run **fix-and-start.sh** or **pull-and-fix.sh**; they call **scripts/fix-openmrs-db-password.sh** and then restart OpenMRS so it reconnects with the correct password.
-3. To run only the DB fix: `cd healfast-branding && bash scripts/fix-openmrs-db-password.sh`, then `docker compose ... restart openmrs` (from the directory where you run compose).
+1. **Match the username:** The error shows which user the app uses (e.g. `'openmrs'`). In **bahmni-lite/.env** set `OPENMRS_DB_USERNAME=openmrs` (not `openmrs-user`) so the fix script updates the correct MySQL user.
+2. **Passwords:** Set `OPENMRS_DB_PASSWORD` and `MYSQL_ROOT_PASSWORD` in `.env` to the same values the OpenMRS container and MySQL root use (or the value you want; the script will set that password for the DB user).
+3. Run **fix-and-start.sh** or **pull-and-fix.sh**; they run **scripts/fix-openmrs-db-password.sh** and restart OpenMRS.
+4. **Run only the DB fix:**  
+   `cd /opt/bahmni-docker/healfast-branding && sudo bash scripts/fix-openmrs-db-password.sh`  
+   then restart OpenMRS with your compose command (e.g. `docker compose ... restart openmrs`).
 
 ## Branding and dashboard (/bahmni/home/#/dashboard)
 
@@ -110,6 +113,7 @@ Config (logo, CSS, whiteLabel) is served by nginx at `/bahmni_config/` so it app
 - **pull-and-fix.sh** – git pull then fix-all (run after updates)
 - **fix-all.sh** – fix paths, SSL, stack, optional Certbot
 - **fix-and-start.sh** – fix paths, SSL, and start stack
+- **teardown-all.sh** – remove everything: stop containers, remove volumes, clear .env, delete the whole installation directory (Docker/Compose stay installed; run with `--confirm` to skip prompt)
 - **scripts/install-certbot.sh** – install Certbot (apt)
 - **scripts/obtain-letsencrypt.sh** – obtain/renew Let's Encrypt cert and copy to `ssl/`
 - **scripts/copy-certs-and-reload.sh** – copy certs and reload nginx (used by renew hook)
